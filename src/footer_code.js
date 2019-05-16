@@ -29,8 +29,10 @@ function parseQueryString(queryString) {
     // parts is ["s1", "123"]
     parts = pair.split("=")
     let key = parts[0];
-    let value = parts[1] || "";
-    obj[key] = value;
+    let value = parts[1];
+    if (key && value) {
+      obj[key] = value;
+    }
     // {"s1": "123"}
   }
   return obj
@@ -45,13 +47,14 @@ function remapParams(original, urlParams, keyMapping) {
     value = null;
     dest_key = keyMapping[source_key];
     value = urlParams[source_key] || original[dest_key];
-    if (value != null) {
+    if (value && dest_key) {
       obj[dest_key] = value;
     }
   }
   for (var key in original) {
-    if (!obj[key]) {
-      obj[key] = original[key];
+    value = original[key];
+    if (!obj[key] && value && key) {
+      obj[key] = value;
     }
   }
   return obj
